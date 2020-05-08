@@ -19,7 +19,7 @@ class Othello:
         pyxel.run(self.update, self.draw)
 
     def get_indices(self, x, y):
-        if x < 0 or x > SCREEN_WIDTH or y < 0 or y > SCREEN_WIDTH:
+        if x < 0 or x >= SCREEN_WIDTH or y < 0 or y >= SCREEN_WIDTH:
             return (None, None)
         return (x // SQUARE_SIZE, y // SQUARE_SIZE)
 
