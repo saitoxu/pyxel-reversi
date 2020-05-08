@@ -15,6 +15,7 @@ class Othello:
         pyxel.mouse(True)
         self.board = Board()
         self.current_player = 'black'
+        self.winner = None
         pyxel.run(self.update, self.draw)
 
     def get_indices(self, x, y):
@@ -22,23 +23,40 @@ class Othello:
             return (None, None)
         return (x // SQUARE_SIZE, y // SQUARE_SIZE)
 
+    def change_turn(self):
+        if self.current_player == 'black':
+            self.current_player = 'white'
+        else:
+            self.current_player = 'black'
+        self.winner = self.board.winner()
+
+    def pass_button_pressed(self):
+        # TODO: パスボタン押下時の処理
+        return False
+
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
 
         if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
-            row, col = self.get_indices(pyxel.mouse_x, pyxel.mouse_y)
-            if row is not None and col is not None:
-                print(ROWS[row], COLS[col])
+            r_idx, c_idx = self.get_indices(pyxel.mouse_x, pyxel.mouse_y)
+            # 石を置く
+            if r_idx is not None and c_idx is not None and self.board.can_move(ROWS[r_idx], COLS[c_idx], self.current_player):
+                self.board.move(ROWS[r_idx], COLS[c_idx], self.current_player)
+                self.change_turn()
+            # パスする
+            elif self.board.can_pass(self.current_player) and self.pass_button_pressed():
+                self.change_turn()
+
 
     def draw(self):
         # 盤面の描画
         pyxel.cls(0)
         pyxel.rect(0, 0, SCREEN_WIDTH, SCREEN_WIDTH, 3)
 
-        # TODO: 配置できる場所だったらマスの色を変える
         r_idx, c_idx = self.get_indices(pyxel.mouse_x, pyxel.mouse_y)
-        if r_idx is not None and c_idx is not None:
+        # 配置できる場所だったらマスの色を変える
+        if r_idx is not None and c_idx is not None and self.board.can_move(ROWS[r_idx], COLS[c_idx], self.current_player):
             pyxel.rect(SQUARE_SIZE * r_idx, SQUARE_SIZE * c_idx, SQUARE_SIZE, SQUARE_SIZE, 9)
 
         # 線の描画
@@ -46,10 +64,14 @@ class Othello:
             pyxel.line(SQUARE_SIZE * i, 0, SQUARE_SIZE * i, 240, 0)
             pyxel.line(0, SQUARE_SIZE * i, 240, SQUARE_SIZE * i, 0)
 
-        # TODO: 石の描画
+        # 石の描画
         for x, row in enumerate(ROWS):
             for y, col in enumerate(COLS):
-                pass
+                color = self.board.get(row, col)
+                if color:
+                    code = 0 if color == 'black' else 7
+                    pyxel.circ(SQUARE_SIZE * x + SQUARE_SIZE // 2,
+                               SQUARE_SIZE * y + SQUARE_SIZE // 2, 12, code)
 
         # TODO: パスボタンの描画
         # TODO: ゲーム終了メッセージの描画
