@@ -42,8 +42,6 @@ class Othello:
         max_x = PASS_BTN_X + PASS_BTN_W
         min_y = PASS_BTN_Y
         max_y = PASS_BTN_Y + PASS_BTN_H
-        print(pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON) and x >=
-              min_x and x <= max_x and y >= min_y and y <= max_y)
         return pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON) and x >= min_x and x <= max_x and y >= min_y and y <= max_y
             
 
@@ -68,7 +66,6 @@ class Othello:
         pyxel.rect(0, 0, SCREEN_WIDTH, SCREEN_WIDTH, 3)
 
         r_idx, c_idx = self.get_indices(pyxel.mouse_x, pyxel.mouse_y)
-        print(pyxel.mouse_x, pyxel.mouse_y)
         # 配置できる場所だったらマスの色を変える
         if r_idx is not None and c_idx is not None and self.board.can_move(ROWS[r_idx], COLS[c_idx], self.current_player):
             pyxel.rect(SQUARE_SIZE * r_idx, SQUARE_SIZE * c_idx, SQUARE_SIZE, SQUARE_SIZE, 9)
