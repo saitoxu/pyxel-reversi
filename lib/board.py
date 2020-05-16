@@ -22,9 +22,12 @@ class Board:
 
     def can_move(self, row, col, color):
         #まずは8方向に存在するマス、石の種類について書いていく
+        self.color = color
         direc_list = [[] for _ in range(8)]
 
         direc_tup = ((-1,-1),(-1,0),(-1,1),(0,1),(1,1),(1,0),(1,-1),(0,-1))
+        direc_finish_tup = (("1","a"),("1","0"),("1","h"),("0","h"),("8","h"),("8","0"),("8","a"),("0","a"))
+        #8面の各方向に進んで行った時に、マスの目に入る値が何だったら終了するのかを示したタプル。0はなんでもいい時。
 
         if self.row == "1":
             direc_list[0] = None
@@ -50,9 +53,15 @@ class Board:
             if direc_list[i] == None:
                 pass
             else:
-                now_direc_tup = direc_tup[i]
-                now_row = self.ROWS.index(self.row) + now_direc_tup[0]
-                now_col = self.COLS.index(self.col) + now_direc_tup[1]
+                now_row = self.ROWS.index(self.row) + direc_tup[i][0]
+                now_col = self.COLS.index(self.col) + direc_tup[i][1]
+                direc_list[i][0] = self.ROWS[now_row]
+                direc_list[i][1] = self.COLS[now_col]
+                #隣のマスを取ってこれたので、色を調べる
+                if RCdic[tuple(direc_list[i])] == self.color:
+                    pass
+                elif:
+                    #端かどうかを調べ、端だったらこの回は終了。端じゃなかったら、恥に行くまでの回数同じことを確認できるはず。
 
 
         return True
@@ -70,3 +79,4 @@ if __name__ == "__main__":
     board = Board()
     print(RCdic)
     print(board.get('5', 'd'))
+    print(board.can_move("1","a"))
