@@ -53,25 +53,25 @@ class Board:
         ## 8方向それぞれのベクトル
         direc_tup = ((-1,-1),(-1,0),(-1,1),(0,1),(1,1),(1,0),(1,-1),(0,-1))
         ## now_rowは仮置きの関数で、座標を作るための入れ物
+        now_row = self.ROWS.index(row)
+        now_col = self.COLS.index(col)
+        direc_finish_tup = (("1","a"),("1","0"),("1","h"),("0","h"),("8","h"),("8","0"),("8","a"),("0","a"))
+
         for i in range(8):
             if direc_list[i] != None:
-                now_row = self.ROWS.index(row) + direc_tup[i][0]
-                now_col = self.COLS.index(col) + direc_tup[i][1]
-                print(now_row,now_col)
-                ## これをそのままdirec_listに入れたいが、端っこだったら先に排除する
-                ## 8方向それぞれに進んで行った時の端に来たときの座標の値のリスト
-                direc_finish_tup = (("1","a"),("1","0"),("1","h"),("0","h"),("8","h"),("8","0"),("8","a"),("0","a"))
-                
-                ## direc_finish_tup[i][0]またはdirec_finish_tup[i][1]が0になる時にValueErrorが起きてしまうので、例外処理を入れている
-                try:
-                    if now_row == self.ROWS.index(direc_finish_tup[i][0]) or now_col == self.COLS.index(direc_finish_tup[i][1]):
-                        print("pass")
-                        pass
-                    else:
+                for i in range(7):
+                    if direc_tup[i][0] != self.ROWS.index(direc_finish_tup[i][0]) and direc_tup[i][1] != self.COLS.index(direc_finish_tup[i][1]):
+                        now_row += direc_tup[i][0]
+                        now_col += direc_tup[i][1]
+                        print(now_row,now_col)
                         direc_list[i].append([str(now_row),str(now_col)])
                         print(direc_list)
-                except ValueError:
-                    pass
+                    else:
+                        pass
+            else:
+                pass
+                ## これをそのままdirec_listに入れたいが、端っこだったら先に排除する
+                ## 8方向それぞれに進んで行った時の端に来たときの座標の値のリスト
 
         #1-3:周囲8マスの座標を入れるのが完了したので、さらに隣り合うマスの座標を入れる
         ## 最大でも6マスだけ。
