@@ -53,64 +53,35 @@ class Board:
         ## 8方向それぞれのベクトル
         direc_tup = ((-1,-1),(-1,0),(-1,1),(0,1),(1,1),(1,0),(1,-1),(0,-1))
         ## now_rowは仮置きの関数で、座標を作るための入れ物
-        now_row = self.ROWS.index(row)
-        now_col = self.COLS.index(col)
+
         direc_finish_tup = (("1","a"),("1","0"),("1","h"),("0","h"),("8","h"),("8","0"),("8","a"),("0","a"))
 
         for i in range(8):
-            if direc_list[i] != None:
-                for i in range(7):
-                    if direc_tup[i][0] != self.ROWS.index(direc_finish_tup[i][0]) and direc_tup[i][1] != self.COLS.index(direc_finish_tup[i][1]):
-                        now_row += direc_tup[i][0]
-                        now_col += direc_tup[i][1]
-                        print(now_row,now_col)
-                        direc_list[i].append([str(now_row),str(now_col)])
-                        print(direc_list)
-                    else:
-                        pass
-            else:
-                pass
-                ## これをそのままdirec_listに入れたいが、端っこだったら先に排除する
-                ## 8方向それぞれに進んで行った時の端に来たときの座標の値のリスト
-
-        #1-3:周囲8マスの座標を入れるのが完了したので、さらに隣り合うマスの座標を入れる
-        ## 最大でも6マスだけ。
-        ## 私見:now_rowが引き継がれているのかが謎
-        # for j in range(6):
-        #     now_row =  self.ROWS.index(direc_list[i][j][0]) + direc_tup[i][0]
-        #     now_col =  self.COLS.index(direc_list[i][j][1]) + direc_tup[i][1]
-        #     if now_row == self.ROWS.index(direc_finish_tup[i][0]) or now_col == self.COLS.index(direc_finish_tup[i][1]):
-        #         print("pass")
-        #         pass
-        #     else:
-        #         direc_list[i].append([str(now_row),str(now_col)])
-        #         print(direc_list)
-
-
-        # # [self.ROWS.index(row), self.COLS.index(col)] for _ in range(8)]　これは中央マスの座標を入れているだけ
-
+            now_row = self.ROWS.index(row)
+            now_col = self.COLS.index(col)
+            if direc_list[i] is not None:
+                while True:
+                    next_row = now_row + direc_tup[i][0]
+                    next_col = now_col + direc_tup[i][1]
+                    direc_list[i].append([int(next_row),int(next_col)])
+                    # print(next_row)
+                    # print(next_col)
+                    if direc_finish_tup[i][0] == "0":
+                        if next_col == self.COLS.index(direc_finish_tup[i][1]):
+                            break
+                    elif direc_finish_tup[i][1] == "0":
+                        if next_row == self.ROWS.index(direc_finish_tup[i][0]):
+                            break
+                    elif next_row == self.ROWS.index(direc_finish_tup[i][0]) or next_col == self.COLS.index(direc_finish_tup[i][1]):
+                        break
+                    now_row = next_row
+                    now_col = next_col
+        print(direc_list[4][0][0])
+        board.get(self.ROWS[direc_list[5][0][0]],self.COLS[direc_list[5][0][1]])
         # for i in range(8):
-        #     if direc_list[i] == None:
-        #         direc_turn_list[i] = None
-        #         pass
-        #     else:
-        #         #8方向それぞれについて、端に行くまで
-        #         now_row = 0
-        #         now_col = 0
-        #         for j in range(8):
-        #             now_row += j * direc_tup[i][0] #起点が中心のますになってないぞ？
-        #             now_col += j * direc_tup[i][1]
-        #             if now_row >7 or now_row <0 or now_col >7 or now_col<0:#これは意味なさげ
-        #                 pass
-        #             else:
-        #                 direc_list[i][0] = self.ROWS[now_row]#direc_listの0,0が数字に変わってないぞ
-        #                 direc_list[i][1] = self.COLS[now_col]
-        #                 #端に来てないか
-        #                 if direc_list[i][0] == direc_finish_tup[i][0] or direc_list[i][1] == direc_finish_tup[i][1]:
-        #                     pass
-                        # else:
-                            #色情報を入れていく
-        #                     direc_turn_list[i].append(self.RCdic[tuple(direc_list[i])])
+        #     for j in range(len(direc_list[i]):
+
+        #1-3:周囲の座標のそれぞれの色を取ってくる
         # #周囲8方向のマスの石の色が順番に入っているはずなので、あとはTrueとFalseを返す
         # for i in range(8):
         #     if direc_turn_list[i] == None:
@@ -140,4 +111,4 @@ if __name__ == "__main__":
     board = Board()
     # print(RCdic)
     # print(board.get('5', 'd'))
-    print(board.can_move("1","a","black"))
+    print(board.can_move("3","d","white"))
