@@ -76,27 +76,16 @@ class Board:
                         break
                     now_row = next_row
                     now_col = next_col
-        print(direc_list[4][0][0])
-        board.get(self.ROWS[direc_list[5][0][0]],self.COLS[direc_list[5][0][1]])
-        # for i in range(8):
-        #     for j in range(len(direc_list[i]):
 
         #1-3:周囲の座標のそれぞれの色を取ってくる
-        # #周囲8方向のマスの石の色が順番に入っているはずなので、あとはTrueとFalseを返す
-        # for i in range(8):
-        #     if direc_turn_list[i] == None:
-        #         pass
-        #     else:
-        #         for j in range(len(direc_turn_list[i])):
-        #             if direc_turn_list[i][j] == color:
-        #                 pass
-        #             else:
-        #                 direc_turn_number[i] += 1
-            # if direc_turn_number[i] >= 1:
-            #     return True
-            # else:
-            #     return False
-                #色が一緒だったら
+        color_list = [[] for _ in range(8)]
+        for i in range(len(direc_list)):
+            if direc_list[i] == None:
+                color_list[i] = None
+            else:
+                for j in range(len(direc_list[i])):
+                    color_list[i].append(board.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
+        print(color_list)
     
     def move(self, row, col, color):
         pass
