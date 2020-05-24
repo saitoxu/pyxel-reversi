@@ -21,15 +21,11 @@ class Board:
         return self.RCdic[gettup]
 
     def can_move(self, row, col, color):
+        if self.get(row,col) is not None:
+            return False
         #1:中央マスの周囲8方向に存在するマスの座標を入れるリストを作成。
         #8方向それぞれの隣あうマスの座標を入れるリスト。隣へ隣へ、と値を更新する。
         direc_list = [[] for _ in range(8)]
-        
-        #8方向それぞれに並んでいるコマの色を、中心のコマから近い順に入れていく。中心の隣に何もコマがない時はNone
-        # direc_turn_list = [[] for _ in range(8)]
-        #8面の各方向に進んで行った時に、マスの目に入る値が何だったら終了するのかを示したタプル。0はなんでもいい時。
-        #各方向に何枚ひっくり返せるかを入れるリスト
-        # direc_turn_number = [0] * 8
 
         #1-1:周囲8方向のマスのうちマスが存在しないところにはNoneを入れる作業
         if row == "1":
@@ -64,8 +60,6 @@ class Board:
                     next_row = now_row + direc_tup[i][0]
                     next_col = now_col + direc_tup[i][1]
                     direc_list[i].append([int(next_row),int(next_col)])
-                    # print(next_row)
-                    # print(next_col)
                     if direc_finish_tup[i][0] == "0":
                         if next_col == self.COLS.index(direc_finish_tup[i][1]):
                             break
@@ -84,9 +78,29 @@ class Board:
                 color_list[i] = None
             else:
                 for j in range(len(direc_list[i])):
-                    color_list[i].append(board.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
-        print(color_list)
-    
+                    color_list[i].append(self.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
+
+        #1-4:周囲の色からそこにコマを置けるかどうかを判断する
+        ## 隣り合うマスにコマがあるか、それは置こうとしているコマと反対の色か
+        ## 返すことのできるマスの数を記録するリスト
+        for cl in color_list:
+            if self.turn(color,cl) != 0:
+                return True
+        return False
+
+    def turn(self,color,color_line):
+        if color_line is None:
+            return 0
+        c_number = 0
+        for c in color_line:
+            if c is None:
+                return 0
+            if c != color:
+                c_number += 1
+            if c == color:
+                return c_number
+        return 0
+
     def move(self, row, col, color):
         pass
 
@@ -100,4 +114,4 @@ if __name__ == "__main__":
     board = Board()
     # print(RCdic)
     # print(board.get('5', 'd'))
-    print(board.can_move("3","d","white"))
+    print(board.can_move("4","d","white"))
