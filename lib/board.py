@@ -23,11 +23,29 @@ class Board:
     def can_move(self, row, col, color):
         if self.get(row,col) is not None:
             return False
-        #1:中央マスの周囲8方向に存在するマスの座標を入れるリストを作成。
-        #8方向それぞれの隣あうマスの座標を入れるリスト。隣へ隣へ、と値を更新する。
-        direc_list = [[] for _ in range(8)]
+        #1:周囲8方向のマスの座標を取ってくるdirec_listを呼び出す
+        direc_list = self.make_direc_list(row,col)
+        print(direc_list)
+        
+        #1-3:周囲の座標とそれぞれの色を辞書型にする
+        color_list = [[] for _ in range(8)]
+        for i in range(len(direc_list)):
+            if direc_list[i] == None:
+                color_list[i] = None
+            else:
+                for j in range(len(direc_list[i])):
+                    color_list[i].append(self.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
+        #1-4:周囲の色からそこにコマを置けるかどうかを判断する
+        ## 隣り合うマスにコマがあるか、それは置こうとしているコマと反対の色か
+        ## 返すことのできるマスの数を記録するリスト
+        for cl in color_list:
+            if self.turn(color,cl) != 0:
+                return True
+        return False
 
-        #1-1:周囲8方向のマスのうちマスが存在しないところにはNoneを入れる作業
+    #8方向それぞれの隣あうマスの座標を入れるリスト。隣へ隣へ、と値を更新する。
+    def make_direc_list(self, row, col):
+        direc_list = [[] for _ in range(8)]
         if row == "1":
             direc_list[0] = None
             direc_list[1] = None
@@ -44,12 +62,10 @@ class Board:
             direc_list[2] = None
             direc_list[3] = None
             direc_list[4] = None
-        
+
         #1-2:周囲隣り合っている8方向のマスの座標をdirec_listに入れる
         ## 8方向それぞれのベクトル
         direc_tup = ((-1,-1),(-1,0),(-1,1),(0,1),(1,1),(1,0),(1,-1),(0,-1))
-        ## now_rowは仮置きの関数で、座標を作るための入れ物
-
         direc_finish_tup = (("1","a"),("1","0"),("1","h"),("0","h"),("8","h"),("8","0"),("8","a"),("0","a"))
 
         for i in range(8):
@@ -70,25 +86,10 @@ class Board:
                         break
                     now_row = next_row
                     now_col = next_col
+        return direc_list
+        print(direc_list)
 
-        #1-3:周囲の座標のそれぞれの色を取ってくる
-        color_list = [[] for _ in range(8)]
-        for i in range(len(direc_list)):
-            if direc_list[i] == None:
-                color_list[i] = None
-            else:
-                for j in range(len(direc_list[i])):
-                    color_list[i].append(self.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
-
-        #1-4:周囲の色からそこにコマを置けるかどうかを判断する
-        ## 隣り合うマスにコマがあるか、それは置こうとしているコマと反対の色か
-        ## 返すことのできるマスの数を記録するリスト
-        for cl in color_list:
-            if self.turn(color,cl) != 0:
-                return True
-        return False
-
-    def turn(self,color,color_line):
+    def turn(self,color,color_line): #color_line
         if color_line is None:
             return 0
         c_number = 0
@@ -102,6 +103,37 @@ class Board:
         return 0
 
     def move(self, row, col, color):
+        if self.can_move(row,col,color) == True:
+            self.RCdic[(str(row),str(col))] = str(color)
+            #turn_colorとwhich_turnを使ってmoveする
+        pass
+
+    def turn_color(self, row, col, color): #マスをひっくり返す関数moveで使う
+        pass
+
+    def which_turn(self, row, col, color): #どのマスをひっくり返すのか判定する関数moveでつかう
+        direc_list = self.make_direc_list(row,col)
+        
+        color_list = [[] for _ in range(8)]
+        for i in range(len(direc_list)):
+            if direc_list[i] == None:
+                color_list[i] = None
+            else:
+                for j in range(len(direc_list[i])):
+                    color_list[i].append(self.get(self.ROWS[direc_list[i][j][0]],self.COLS[direc_list[i][j][1]]))
+        which_turn_list = []
+        for i in range(len(color_list)):
+            cl = color_list[i]
+            if self.turn(color,cl) != 0:
+                # print(self.turn(color,cl))
+                for j in range(self.turn(color,cl)):
+                    # print(direc_list[i][j])
+                    which_turn_list.append(direc_list[i][j])
+                    #8方向の座標の入ったリストから座標だけ抜き取って入れる
+        # print(which_turn_list.append(direc_list[0][1]))
+        print(direc_list)
+        print(color_list)
+        print(which_turn_list)
         pass
 
     def can_pass(self, color):
@@ -112,6 +144,9 @@ class Board:
 
 if __name__ == "__main__":
     board = Board()
-    # print(RCdic)
     # print(board.get('5', 'd'))
-    print(board.can_move("4","d","white"))
+    # print(board.can_move("1","a","black"))
+    # print(board.make_direc_list("1","a"))
+    print(board.which_turn("5","f","white"))
+    # print(board.which_turn("3","d","black"))
+    # print(board.move("3","d","black"))
