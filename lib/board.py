@@ -25,7 +25,6 @@ class Board:
             return False
         #1:周囲8方向のマスの座標を取ってくるdirec_listを呼び出す
         direc_list = self.make_direc_list(row,col)
-        print(direc_list)
         #1-3:周囲の座標とそれぞれの色を辞書型にする
         color_list = [[] for _ in range(8)]
         for i in range(len(direc_list)):
@@ -37,7 +36,7 @@ class Board:
         #1-4:周囲の色からそこにコマを置けるかどうかを判断する
         ## 隣り合うマスにコマがあるか、それは置こうとしているコマと反対の色か
         ## 返すことのできるマスの数を記録するリスト
-        print(self.RCdic)
+        # print(self.RCdic)
         for cl in color_list:
             if self.turn(color,cl) != 0:
                 return True
@@ -87,7 +86,6 @@ class Board:
                     now_row = next_row
                     now_col = next_col
         return direc_list
-        print(direc_list)
 
     def turn(self,color,color_line): #color_line
         if color_line is None:
@@ -103,10 +101,13 @@ class Board:
         return 0
 
     def move(self, row, col, color):
-        if self.can_move(row,col,color) == True:
-            self.RCdic[(str(row),str(col))] = str(color)
-            #turn_colorとwhich_turnを使ってmoveする
-        pass
+        if self.can_move(row,col,color) is True:
+            RCdic = self.turn_color(row,col,color)
+            RCdic[(row,col)] = color
+            return RCdic
+        else:
+            #can_pass(color)
+            pass
 
     def turn_color(self, row, col, color): #マスをひっくり返す関数moveで使う
         which_turn_list = self.which_turn(row,col,color)
@@ -122,6 +123,7 @@ class Board:
                 self.RCdic[xytuple] = "white"
             else:
                 self.RCdic[xytuple] = "black"
+        return self.RCdic
 
 
     def which_turn(self, row, col, color): #どのマスをひっくり返すのか判定する関数moveでつかう
@@ -157,6 +159,7 @@ if __name__ == "__main__":
     # print(board.get('5', 'd'))
     # print(board.can_move("3","e","black"))
     # print(board.make_direc_list("1","a"))
-    print(board.turn_color("3","e","white"))
-    print(board.which_turn("3","e","white"))
+    # print(board.turn_color("3","e","white"))
+    # print(board.which_turn("3","e","white"))
+    # print(board.move("3","e","white"))
     # print(board.move("3","d","black"))
