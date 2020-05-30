@@ -82,7 +82,8 @@ class Othello:
                                SQUARE_SIZE * y + SQUARE_SIZE // 2, 12, code)
 
         # パスボタンの描画
-        pyxel.rect(PASS_BTN_X, PASS_BTN_Y, PASS_BTN_W, PASS_BTN_H, 9 if self.board.can_pass(self.current) else 13)
+        can_pass = self.winner is None and self.board.can_pass(self.current)
+        pyxel.rect(PASS_BTN_X, PASS_BTN_Y, PASS_BTN_W, PASS_BTN_H, 9 if can_pass else 13)
         pyxel.text(PASS_BTN_X + 10, PASS_BTN_Y + 3, 'PASS', 7)
         # 現在のプレイヤー表示
         pyxel.text(4, SCREEN_WIDTH + 5, "Black's turn" if self.current == 'black' else "White's turn", 7)
