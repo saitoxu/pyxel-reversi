@@ -167,33 +167,21 @@ class Board:
         else:
             return True
 
-        # xdic = {("1","a"):3 ,("2","b"):4 ,("3","c"):None}
-        # for k,v in xdic.items():
-        #     if v == None:
-        #         print(None)
-        #     else:
-        #         print(k[0])
-        #         print(k[1])
-        #         print(v)
-
-        # while any (v != None)
-        #1aから全部順番に入っている石をみて、
-        #おけるますがない時にTrue
-        #おけるますがない＝おいたとしても、ひっくり返せるますが0である
-        # len_wtlist = len(self.which_turn(row,col,color))
-        # # print(self.which_turn(self.row,self.col,color))
-        # # print(self.row)
-        # # print(self.col)
-        # if  len_wtlist == 0:
-        #     return True
-        # else:
-            # return False
-        # print(self.row)
-        # print(self.col)
-        # print(which_turn_list)
-    
     def winner(self):
-        return None
+        if self.can_pass("white") is True and self.can_pass("black")is True:
+            # print(self.RCdic)
+            value_list = list(self.RCdic.values())
+            # print(value_list)
+            count_black = value_list.count("black")
+            count_white = value_list.count("white")
+            print(count_black)
+            print(count_white)
+            if count_white > count_black:
+                return "white"
+            else:
+                return "black"
+        else:
+            return None
 
 if __name__ == "__main__":
     board = Board()
@@ -203,4 +191,5 @@ if __name__ == "__main__":
     # print(board.turn_color("3","e","white"))
     # print(board.which_turn("3","d","black"))
     # print(board.move("3","e","white"))
-    print(board.can_pass("white"))
+    # print(board.can_pass("white"))
+    print(board.winner())
