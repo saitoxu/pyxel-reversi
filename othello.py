@@ -1,5 +1,4 @@
 import pyxel
-
 from lib.config import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -14,6 +13,8 @@ from lib.config import (
 )
 from lib.board import Board
 from lib.human_player import HumanPlayer
+from lib.random_player import RandomPlayer
+
 
 class Othello:
     def __init__(self):
@@ -21,9 +22,10 @@ class Othello:
         pyxel.mouse(True)
         self.board = Board()
         self.current = 'black'
-        self.black_player = HumanPlayer(pyxel, self.board, 'black')
-        self.white_player = HumanPlayer(pyxel, self.board, 'white')
+        self.black_player = RandomPlayer(pyxel, self.board, 'black')
+        self.white_player = RandomPlayer(pyxel, self.board, 'white')
         self.winner = None
+        self.previous_frame_count = 0
         pyxel.run(self.update, self.draw)
 
     def change_turn(self):
@@ -45,7 +47,8 @@ class Othello:
         """
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
-        if self.current_player().move():
+        if self.current_player().move(self.previous_frame_count):
+            self.previous_frame_count = pyxel.frame_count
             self.change_turn()
 
     def draw(self):

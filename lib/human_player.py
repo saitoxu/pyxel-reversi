@@ -9,8 +9,9 @@ from .config import (
 )
 from .player import Player
 
+
 class HumanPlayer(Player):
-    def move(self):
+    def move(self, previous_frame_count):
         """
         手番を進める
         """
