@@ -47,6 +47,9 @@ class Othello:
         """
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
+            return
+        if self.winner is not None:
+            return
         if self.current_player().move(self.previous_frame_count):
             self.previous_frame_count = pyxel.frame_count
             self.change_turn()
