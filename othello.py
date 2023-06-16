@@ -18,11 +18,11 @@ from lib.random_player import RandomPlayer
 
 class Othello:
     def __init__(self):
-        pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, caption="Pyxel Othello")
+        pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Pyxel Othello")
         pyxel.mouse(True)
         self.board = Board()
         self.current = 'black'
-        self.black_player = RandomPlayer(pyxel, self.board, 'black')
+        self.black_player = HumanPlayer(pyxel, self.board, 'black')
         self.white_player = RandomPlayer(pyxel, self.board, 'white')
         self.winner = None
         self.previous_frame_count = 0
@@ -34,7 +34,7 @@ class Othello:
         """
         self.current = 'white' if self.current == 'black' else 'black'
         self.winner = self.board.winner()
-    
+
     def current_player(self):
         """
         現在のプレイヤーを取得

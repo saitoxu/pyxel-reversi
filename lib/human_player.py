@@ -16,7 +16,7 @@ class HumanPlayer(Player):
         手番を進める
         """
         pyxel = self.pyxel
-        if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             r_idx, c_idx = get_indices(pyxel.mouse_x, pyxel.mouse_y)
             if r_idx is not None and c_idx is not None and self.board.can_move(ROWS[r_idx], COLS[c_idx], self.color):
                 # 石を置く
@@ -35,4 +35,4 @@ class HumanPlayer(Player):
         max_x = PASS_BTN_X + PASS_BTN_W
         min_y = PASS_BTN_Y
         max_y = PASS_BTN_Y + PASS_BTN_H
-        return pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON) and x >= min_x and x <= max_x and y >= min_y and y <= max_y
+        return pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) and x >= min_x and x <= max_x and y >= min_y and y <= max_y
